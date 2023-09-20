@@ -2,7 +2,6 @@ const fs = require("fs");
 const inquirer = require("inquirer");
 const MaxLengthInputPrompt = require("inquirer-maxlength-input-prompt");
 inquirer.registerPrompt("maxlength-input", MaxLengthInputPrompt);
-const renderSVG = require("./lib/shapes"); //is this right?
 const { Circle, Triangle, Square, SVG } = require("./lib/shapes");
 const questions = [
   {
@@ -31,11 +30,10 @@ const questions = [
   },
 ];
 
+//render the Logo!
 function writeToFile(fileName, data) {
-  //deal with data here???
-  // let svg = renderSVG(data); //which will be imported from the shapes js
   fs.writeFile(fileName, data, (err) => {
-    err ? console.log(err) : console.log("Generating Logo.....");
+    err ? console.log(err) : console.log("Sucess! You've Generated a logo.svg");
   });
 }
 
@@ -66,8 +64,6 @@ function init() {
       //set shape and text elements
       const text = data.text;
       const textColor = data.textColor;
-      console.log(text);
-      console.log(textColor);
       svg.setTextEl(text, textColor);
       svg.setShapeEl(shape);
       const logo = svg.render();
