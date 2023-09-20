@@ -3,7 +3,7 @@ const inquirer = require("inquirer");
 const MaxLengthInputPrompt = require("inquirer-maxlength-input-prompt");
 inquirer.registerPrompt("maxlength-input", MaxLengthInputPrompt);
 const renderSVG = require("./lib/shapes"); //is this right?
-const { Circle, SVG } = require("./lib/shapes");
+const { Circle, Triangle, Square, SVG } = require("./lib/shapes");
 const questions = [
   {
     type: "maxlength-input",
@@ -49,17 +49,31 @@ function init() {
       let shape;
       if (data.shape === "circle") {
         shape = new Circle();
-        text = data.text;
+        //set color
         shape.setColor(data.shapeColor);
-console.log(text);
-        const svg = new SVG();
-        svg.setShapeEl(shape);
-        svg.setTextEl(text);
-
-        const logo = svg.render();
-
-        writeToFile("logo.svg", logo);
       }
+      if (data.shape === "square") {
+        shape = new Square();
+        //set color
+        shape.setColor(data.shapeColor);
+      }
+      if (data.shape === "triangle") {
+        shape = new Triangle();
+        //set color
+        shape.setColor(data.shapeColor);
+      }
+      const svg = new SVG();
+      //set shape and text elements
+      const text = data.text;
+      const textColor = data.textColor;
+      console.log(text);
+      console.log(textColor);
+      svg.setTextEl(text, textColor);
+      svg.setShapeEl(shape);
+      const logo = svg.render();
+
+      //render svg!!!
+      writeToFile("logo.svg", logo);
     })
     .catch((error) => {
       if (error.isTtyError) {
@@ -71,8 +85,5 @@ console.log(text);
       }
     });
 }
-
-//export the input formatted? like with ${} in a way that it can be received and translated
-
+//initialize INIT!
 init();
-//or can create a function that writes the file with the data after receiving the render funtion first and just throuwing the data in here
