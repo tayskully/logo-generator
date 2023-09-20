@@ -1,41 +1,42 @@
 const fs = require("fs");
 const inquirer = require("inquirer");
-
+const MaxLengthInputPrompt = require("inquirer-maxlength-input-prompt");
+inquirer.registerPrompt("maxlength-input", MaxLengthInputPrompt);
+const renderSVG = require("./lib/shapes"); //is this right?
+const { Circle, SVG } = require("./lib/shapes");
 const questions = [
   {
-    type: "list",
-    message: "which shape would you like the base of the logo to be?",
-    name: "shape1",
-    choices: ["square", "circle", "triangle"],
-  },
-  {
-    type: "list",
-    message: "which color would you like the shape to be?",
-    name: "color1",
-    choices: ["Blue", "Red", "Yellow"], //idk
-  },
-  {
-    type: "list",
-    message: "which shape would you like the text to sit in?",
-    name: "shape2",
-    choices: ["square", "circle", "triangle"],
-  },
-  {
-    type: "list",
-    message: "which color would you like this shape to be?",
-    name: "color2",
-    choices: ["Blue", "Red", "Yellow"],
+    type: "maxlength-input",
+    message: "Which text would you like to render as the logo?",
+    name: "text",
+    maxLength: 3,
   },
   {
     type: "input",
-    message: "Which text would you like to render as the logo?",
-    name: "text",
+    message:
+      "Which color would you like the text to be? Enter a color or a hexadecimal number",
+    name: "textColor",
+  },
+  {
+    type: "list",
+    message: "Which shape would you like the logo to be?",
+    name: "shape",
+    choices: ["square", "circle", "triangle"],
+  },
+  {
+    type: "input",
+    message:
+      "Which color would you like the shape to be? Enter a color or a hexadecimal number",
+    name: "shapeColor",
   },
 ];
+
 function writeToFile(fileName, data) {
-  let svg = renderSVG(data);
-  fs.writeFile(fileName, svg),
-    (err) => (err ? console.log(err) : console.log("success!!!"));
+  //deal with data here???
+  // let svg = renderSVG(data); //which will be imported from the shapes js
+  fs.writeFile(fileName, data, (err) => {
+    err ? console.log(err) : console.log("Generating Logo.....");
+  });
 }
 
 function init() {
@@ -44,7 +45,21 @@ function init() {
     .prompt(questions)
     .then((data) => {
       console.log(data);
-      writeToFile("logo.svg", data); //from readme generator
+      //declare variable, and redefine through the if statement
+      let shape;
+      if (data.shape === "circle") {
+        shape = new Circle();
+        text = data.text;
+        shape.setColor(data.shapeColor);
+console.log(text);
+        const svg = new SVG();
+        svg.setShapeEl(shape);
+        svg.setTextEl(text);
+
+        const logo = svg.render();
+
+        writeToFile("logo.svg", logo);
+      }
     })
     .catch((error) => {
       if (error.isTtyError) {
