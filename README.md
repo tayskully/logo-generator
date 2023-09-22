@@ -18,6 +18,8 @@ In order to install this project, you must have Node.js, and run an npm install 
 
 ## Usage/Tests
 
+For a full walkthrough of the usage of this application, click this here [link](https://watch.screencastify.com/v/tmkKjrjARyiFMtNpn7VL)!
+
 Once you run node index.js in the integrated terminal, answer the prompts run by inquirer in order to render a logo of your choosing. Once you've finished the questions, and see the success message, check out your newly rendered svg logo! If you're viewing in VS code, be sure to install an SVG preview app to view it properly!
 
 - ![Logo-Generator in action](assets/images/screenshot.png)
